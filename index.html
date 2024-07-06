@@ -6,6 +6,7 @@
     <title>Figma Wizard Profile - VIVEK KRISHNA</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
@@ -15,28 +16,57 @@
             <h2>VIVEK KRISHNA</h2>
             <p class="username">@amandreus</p>
             <p>Designing pixels since 2011</p>
-            <button id="connectFigma" onclick="connectFigma()">Connect Figma Account</button>
+            <button id="connectFigma">Generate Demo Profile</button>
         </div>
         <div id="profile" class="hidden">
-            <h2>VIVEK KRISHNA <span class="username">@amandreus</span></h2>
-            <p>Figma Superpowers</p>
-            <div id="stats"></div>
-            <div id="originality">
-                <h3>Originality Level</h3>
-                <div class="progress-bar">
-                    <div class="progress"></div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="profile-header">
+                        <div>
+                            <h2 id="designerName">VIVEK KRISHNA</h2>
+                            <p id="stageName" class="username">@amandreus</p>
+                        </div>
+                        <p id="startYear">Since 2011</p>
+                    </div>
+                    
+                    <div id="stats" class="stats-grid"></div>
+                    
+                    <div id="originality">
+                        <div class="originality-header">
+                            <span>Originality Score</span>
+                            <span id="originalityScore"></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="chart-container">
+                        <h3>Design History</h3>
+                        <canvas id="designJourney"></canvas>
+                    </div>
+                    
+                    <div class="actions">
+                        <button id="exportProfile" class="btn-export">
+                            <i data-lucide="download"></i>
+                            Export
+                        </button>
+                        <div class="share-buttons">
+                            <button onclick="shareProfile('linkedin')" class="btn-share btn-linkedin">
+                                <i data-lucide="linkedin"></i>
+                            </button>
+                            <button onclick="shareProfile('instagram')" class="btn-share btn-instagram">
+                                <i data-lucide="instagram"></i>
+                            </button>
+                            <button onclick="shareProfile('twitter')" class="btn-share btn-twitter">
+                                <i data-lucide="twitter"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <p class="footer">built by amandreus</p>
                 </div>
-                <p class="score"></p>
             </div>
-            <div id="chart-container">
-                <h3>Epic Design Journey</h3>
-                <canvas id="designJourney"></canvas>
-            </div>
-            <div class="actions">
-                <button id="exportProfile" onclick="exportProfile()">Export Superpowers</button>
-                <button id="shareProfile" onclick="shareProfile()">Share Profile</button>
-            </div>
-            <p class="footer">Powered by the Pixel Wizardry of @amandreus</p>
         </div>
     </div>
     <script src="script.js"></script>

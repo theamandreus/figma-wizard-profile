@@ -48,24 +48,28 @@ async function fetchFigmaData(code) {
 function updateProfile(stats) {
     const statsHtml = `
         <div class="stat">
-            <h3>${stats.screens}</h3>
-            <p>Screens Conjured</p>
+            <i data-lucide="monitor" class="stat-icon text-blue-500"></i>
+            <span class="stat-value">${stats.screens}</span>
+            <span class="stat-label">Screens Conjured</span>
         </div>
         <div class="stat">
-            <h3>${(stats.pixels / 1000000).toFixed(1)}M</h3>
-            <p>Pixels Brought to Life</p>
+            <i data-lucide="square" class="stat-icon text-green-500"></i>
+            <span class="stat-value">${(stats.pixels / 1000000).toFixed(1)}M</span>
+            <span class="stat-label">Pixels Brought to Life</span>
         </div>
         <div class="stat">
-            <h3>${stats.layers}</h3>
-            <p>Layers of Magic</p>
+            <i data-lucide="layers" class="stat-icon text-purple-500"></i>
+            <span class="stat-value">${stats.layers}</span>
+            <span class="stat-label">Layers of Magic</span>
         </div>
     `;
 
     document.getElementById('stats').innerHTML = statsHtml;
+    lucide.createIcons(); // Create Lucide icons
 
     const originalityScore = 85;
     document.querySelector('#originality .progress').style.width = `${originalityScore}%`;
-    document.querySelector('#originality .score').textContent = `${originalityScore}% Original`;
+    document.querySelector('#originality .score').textContent = `${originalityScore}%`;
 
     const ctx = document.getElementById('designJourney').getContext('2d');
     new Chart(ctx, {
@@ -75,8 +79,8 @@ function updateProfile(stats) {
             datasets: [{
                 label: 'Screens per Year',
                 data: [50, 200, 500, 1000],
-                backgroundColor: 'rgba(110, 142, 251, 0.6)',
-                borderColor: 'rgba(110, 142, 251, 1)',
+                backgroundColor: '#8884d8',
+                borderColor: '#8884d8',
                 borderWidth: 1
             }]
         },
@@ -85,6 +89,11 @@ function updateProfile(stats) {
             scales: {
                 y: {
                     beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
                 }
             }
         }
