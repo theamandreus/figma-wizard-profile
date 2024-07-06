@@ -1,4 +1,4 @@
-const CLIENT_ID = 'YOUR_FIGMA_CLIENT_ID'; // Replace with your actual Figma Client ID
+const CLIENT_ID = 'TfsazAvwdy1vWqWRecR5vS'; // Replace with your actual Figma Client ID
 
 document.addEventListener('DOMContentLoaded', (event) => {
     checkFigmaAuth();
