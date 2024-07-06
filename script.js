@@ -1,43 +1,73 @@
-document.getElementById('connectFigma').addEventListener('click', connectFigma);
-document.getElementById('exportProfile').addEventListener('click', exportProfile);
-document.getElementById('shareProfile').addEventListener('click', shareProfile);
+const CLIENT_ID = 'YOUR_FIGMA_CLIENT_ID'; // Replace with your actual Figma Client ID
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    checkFigmaAuth();
+});
 
 function connectFigma() {
-    // In a real app, this would redirect to Figma OAuth
-    // For now, we'll just show the profile
-    document.getElementById('profile').style.display = 'block';
-    updateProfile();
+    const redirectUri = 'https://theamandreus.github.io/figma-wizard-profile/callback.html';
+    const scope = 'files:read';
+    const state = Math.random().toString(36).substring(7);
+    
+    localStorage.setItem('figmaAuthState', state);
+    
+    const authUrl = `https://www.figma.com/oauth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${state}&response_type=code`;
+    
+    window.location.href = authUrl;
 }
 
-function updateProfile() {
-    // This would normally fetch data from Figma API
-    // For now, we'll use dummy data
-    const stats = {
-        screens: 1750,
-        pixels: 840000000,
-        layers: 52500
-    };
+function checkFigmaAuth() {
+    const code = localStorage.getItem('figmaAuthCode');
+    const state = localStorage.getItem('figmaAuthState');
+    
+    if (code && state) {
+        localStorage.removeItem('figmaAuthCode');
+        localStorage.removeItem('figmaAuthState');
+        fetchFigmaData(code);
+    }
+}
 
+async function fetchFigmaData(code) {
+    try {
+        // Simulating Figma data fetch
+        const stats = {
+            screens: Math.floor(Math.random() * 2000) + 500,
+            pixels: Math.floor(Math.random() * 1000000000) + 100000000,
+            layers: Math.floor(Math.random() * 100000) + 10000
+        };
+    
+        updateProfile(stats);
+        document.getElementById('landing').classList.add('hidden');
+        document.getElementById('profile').classList.remove('hidden');
+    } catch (error) {
+        console.error('Error fetching Figma data:', error);
+        alert('Failed to fetch Figma data. Please try again.');
+    }
+}
+
+function updateProfile(stats) {
     const statsHtml = `
         <div class="stat">
-            <h4>Screens Conjured</h4>
-            <p>${stats.screens}</p>
+            <h3>${stats.screens}</h3>
+            <p>Screens Conjured</p>
         </div>
         <div class="stat">
-            <h4>Pixels Brought to Life</h4>
-            <p>${(stats.pixels / 1000000).toFixed(1)}M</p>
+            <h3>${(stats.pixels / 1000000).toFixed(1)}M</h3>
+            <p>Pixels Brought to Life</p>
         </div>
         <div class="stat">
-            <h4>Layers of Magic</h4>
-            <p>${stats.layers}</p>
+            <h3>${stats.layers}</h3>
+            <p>Layers of Magic</p>
         </div>
     `;
 
     document.getElementById('stats').innerHTML = statsHtml;
 
-    const ctx = document.createElement('canvas');
-    document.getElementById('chart').appendChild(ctx);
+    const originalityScore = 85;
+    document.querySelector('#originality .progress').style.width = `${originalityScore}%`;
+    document.querySelector('#originality .score').textContent = `${originalityScore}% Original`;
 
+    const ctx = document.getElementById('designJourney').getContext('2d');
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -45,32 +75,35 @@ function updateProfile() {
             datasets: [{
                 label: 'Screens per Year',
                 data: [50, 200, 500, 1000],
-                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                backgroundColor: 'rgba(110, 142, 251, 0.6)',
+                borderColor: 'rgba(110, 142, 251, 1)',
+                borderWidth: 1
             }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
     });
 }
 
 function exportProfile() {
-    const profile = `
-VIVEK KRISHNA's Figma Superpowers
----------------------------------
-Known in the design universe as: "amandreus"
-Wielding the mighty Figma since: 2011
-Screens conjured: 1750
-Pixels brought to life: 840.0M
-Layers of magic: 52500
+    const profileDiv = document.getElementById('profile');
 
-Created by the Pixel Wizard, amandreus
-Disclaimer: No pixels were harmed in the making of this profile.
-    `;
-
-    const blob = new Blob([profile], {type: 'text/plain'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'amandreus_figma_superpowers.txt';
-    a.click();
+    html2canvas(profileDiv).then(canvas => {
+        canvas.toBlob(function(blob) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amandreus_figma_superpowers.png';
+            a.click();
+            URL.revokeObjectURL(url);
+        }, 'image/png', 1.0);
+    });
 }
 
 function shareProfile() {

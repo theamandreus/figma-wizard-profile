@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma Authorization Callback</title>
+</head>
+<body>
+    <h1>Processing Figma Authorization...</h1>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+
+        if (code && state) {
+            localStorage.setItem('figmaAuthCode', code);
+            localStorage.setItem('figmaAuthState', state);
+            window.location.href = '/figma-wizard-profile/'; // Redirect back to main page
+        } else {
+            document.body.innerHTML += '<p>Error: No authorization code received.</p>';
+        }
+    </script>
+</body>
+</html>
