@@ -2,6 +2,8 @@ const CLIENT_ID = 'TfsazAvwdy1vWqWRecR5vS'; // Replace with your actual Figma Cl
 
 document.addEventListener('DOMContentLoaded', (event) => {
     checkFigmaAuth();
+    document.getElementById('connectFigma').addEventListener('click', connectFigma);
+    document.getElementById('exportProfile').addEventListener('click', exportProfile);
 });
 
 function connectFigma() {
@@ -65,7 +67,7 @@ function updateProfile(stats) {
     `;
 
     document.getElementById('stats').innerHTML = statsHtml;
-    lucide.createIcons(); // Create Lucide icons
+    lucide.createIcons();
 
     const originalityScore = 85;
     document.querySelector('#originality .progress').style.width = `${originalityScore}%`;
@@ -101,21 +103,27 @@ function updateProfile(stats) {
 }
 
 function exportProfile() {
-    const profileDiv = document.getElementById('profile');
-
-    html2canvas(profileDiv).then(canvas => {
-        canvas.toBlob(function(blob) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'amandreus_figma_superpowers.png';
-            a.click();
-            URL.revokeObjectURL(url);
-        }, 'image/png', 1.0);
+    html2canvas(document.querySelector(".card")).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'figma_wizard_profile.png';
+        link.href = canvas.toDataURL();
+        link.click();
     });
 }
 
-function shareProfile() {
-    const message = `Check out my Figma superpowers! 1750 screens, 840.0M pixels, and 52500 layers of pure design magic! #FigmaWizard #DesignLife`;
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`, '_blank');
+function shareProfile(platform) {
+    const message = `Check out my Figma Wizard Profile! #FigmaWizard #DesignLife`;
+    let url;
+    switch(platform) {
+        case 'linkedin':
+            url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+            break;
+        case 'instagram':
+            alert('To share on Instagram, save the image and post it to your story or feed!');
+            return;
+        case 'twitter':
+            url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+            break;
+    }
+    if (url) window.open(url, '_blank');
 }
